@@ -1,0 +1,30 @@
+= Apache DeltaSpike - the _CDI_ toolbox
+Antoine Sabot-Durand; Rafael Benevides
+:description: Apache DeltaSpike - the CDI toolbox
+:website:
+:copyright: CC BY-SA 4.0
+:backend: dzslides
+:sectids!:
+:experimental:
+:toc2:
+:sectanchors:
+:idprefix:
+:idseparator: -
+:icons: font
+:source-highlighter: highlightjs
+:source-language: java
+:language: no-highlight
+:macros-on: subs="macros"
+:caption-off: caption=""
+:title-off: title="", caption=""
+:dzslides-aspect: 16-9
+:imagesdir: images
+:next-label: pass:quotes,attributes[*Next* [icon:caret-right[]]
+:dzslides-style: asciidoctor
+:dzslides-highlight: github
+:dzslides-transition: fade
+:dzslides-fonts: family=Neuton:400,700,800,400italic|Cedarville+Cursive
+:hide-uri-scheme:
+:includegifs:
+
+

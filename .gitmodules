@@ -1,0 +1,7 @@
+[submodule "asciidoctor-backends"]
+	path = asciidoctor-backends
+	url = git@github.com:asciidoctor/asciidoctor-backends.git
+[submodule "dzslides"]
+	path = dzslides
+	url = git@github.com:astefanutti/dzslides.git
+	branch = dev

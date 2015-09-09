@@ -1,0 +1,36 @@
+== Build environment (only needed the first time)
+
+Install RVM from here http://rvm.io if you don't already have it.
+
+---
+\curl -sSL https://get.rvm.io | bash -s stable --ruby
+---
+
+Then run:
+----
+rake setup
+----
+
+== Build instructions
+
+To generate the HTML presentation, run the following command:
+----
+rake generate
+----
+
+== Use Guard and LiveReload
+
+With http://guardgem.org/[Guard] and http://livereload.com/[LiveReload], you can change the content of the doc and have the files automatically generated and your browser updated.
+
+Then install the http://livereload.com/extensions[LiveReload plugin] for your browser (Chrome, Firefox and Safari are supported).
+
+Finally, launch Guard:
+----
+bundle exec guard
+----
+
+Browse to the generated file you want to refresh and activate the LiveReload plugin (don't forget to configure the plugin to accept refreshing local files).
+
+== License
+
+The content of this project is licensed under the http://creativecommons.org/licenses/by/4.0/[Creative Commons Attribution 4.0 license], and the underlying source code used for the examples is licensed under the http://opensource.org/licenses/mit-license.php[MIT license].
