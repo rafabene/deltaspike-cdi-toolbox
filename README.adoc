@@ -2,9 +2,9 @@
 
 Install RVM from here http://rvm.io if you don't already have it.
 
----
+----
 \curl -sSL https://get.rvm.io | bash -s stable --ruby
----
+----
 
 Then run:
 ----
@@ -26,7 +26,7 @@ Then install the http://livereload.com/extensions[LiveReload plugin] for your br
 
 Finally, launch Guard:
 ----
-bundle exec guard
+rake preview
 ----
 
 Browse to the generated file you want to refresh and activate the LiveReload plugin (don't forget to configure the plugin to accept refreshing local files).
@@ -34,3 +34,4 @@ Browse to the generated file you want to refresh and activate the LiveReload plu
 == License
 
 The content of this project is licensed under the http://creativecommons.org/licenses/by/4.0/[Creative Commons Attribution 4.0 license], and the underlying source code used for the examples is licensed under the http://opensource.org/licenses/mit-license.php[MIT license].
+
