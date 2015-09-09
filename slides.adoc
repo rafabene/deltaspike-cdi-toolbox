@@ -27,4 +27,41 @@ Antoine Sabot-Durand; Rafael Benevides
 :hide-uri-scheme:
 :includegifs:
 
+[.topic.source]
+== Antoine Sabot-Durand
+
+====
+* icon:user[] Senior Software Engineer
+* icon:user[] CDI co-spec lead, Java EE 8 EG
+* icon:institution[] Red Hat, Inc.
+* icon:twitter[] @antoine_sd
+* icon:rss[] www.next-presso.com
+* icon:github[] github.com/antoinesd
+====
+
+[.topic.source]
+== Rafael Benevides
+
+====
+* icon:user[] Senior Software Engineer
+* icon:user[] DeltaSpike P.M.C member
+* icon:institution[] Red Hat, Inc.
+* icon:twitter[] @rafabene
+* icon:github[] github.com/rafabene
+====
+
+[.topic.source]
+== Agenda
+
+[.recap]
+====
+* icon:info-circle[] CDI Portable Extensions
+* icon:info-circle[] What is DeltaSpike ?
+* icon:info-circle[] Core Module
+* icon:info-circle[] Other DeltaSpike Modules
+* icon:info-circle[] Question & Answers
+
+TIP: Slides available at http://rafabene.github.io/deltaspike-cdi-toolbox/
+====
+
 

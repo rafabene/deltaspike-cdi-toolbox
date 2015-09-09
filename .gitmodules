@@ -3,5 +3,5 @@
 	url = git@github.com:asciidoctor/asciidoctor-backends.git
 [submodule "dzslides"]
 	path = dzslides
-	url = git@github.com:astefanutti/dzslides.git
+  url = git@github.com:rafabene/dzslides.git
 	branch = dev
