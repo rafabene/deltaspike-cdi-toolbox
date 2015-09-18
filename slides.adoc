@@ -64,4 +64,112 @@ Antoine Sabot-Durand; Rafael Benevides
 TIP: Slides available at http://rafabene.github.io/deltaspike-cdi-toolbox/
 ====
 
+[.intro]
+== CDI Portable Extensions
+
+[.topic.source]
+== Portable extensions
+
+NOTE: OCP (Open Closed Principle) in CDI
+
+image::OCP-final.jpg[height="85%"]
+
+[.topic.source]
+== Extensions, what for?
+
+[.statement]
+====
+
+TIP: To integrate 3rd party libraries, frameworks or legacy components
+
+TIP: To change existing configuration or behavior
+
+TIP: To extend CDI and Java EE
+
+TIP: Thanks to them, Java EE can evolve between major releases
+
+====
+
+[.topic.source]
+== Extensions, how?
+
+[.statement]
+====
+
+ifdef::includegifs[]
+image::rubik.gif[role="pull-right", width="250"]
+endif::includegifs[]
+
+TIP: Implement _javax.enterprise.inject.spi.Extension_
+
+TIP: Register the Extension
+
+TIP: Observe SPI events at boot time related to the bean manager lifecycle
+
+====
+
+
+[.topic.source]
+== More concretely
+
+NOTE: Service provider of the service `javax.enterprise.inject.spi.Extension` declared in `META-INF/services`
+
+TIP: Just put the fully qualified name of your extension class in this file
+
+[source, subs="verbatim,quotes", role="smaller"]
+----
+import javax.enterprise.event.Observes;
+import javax.enterprise.inject.spi.Extension;
+
+public class CdiExtension [highlight]#implements Extension# {
+
+    void beforeBeanDiscovery([highlight]#@Observes BeforeBeanDiscovery# bbd) {
+    }
+    //...
+
+    void afterDeploymentValidation([highlight]#@Observes AfterDeploymentValidation# adv) {
+    }
+}
+----
+[.topic.source]
+== Example: Injecting a String from a Properties file
+
+[source]
+----
+    @Inject @Property("key1")
+    private String property1;
+
+    @Inject @Property("key2")
+    private String property2;
+----
+NOTE: It can be achieved by @Produces but it could lead to: _Unsatisfied dependencies for type String with qualifiers @Property..._
+
+[source]
+----
+    @Produces
+    @Property("key1")
+    public String propriedade1Producer()
+    {
+        return propertiesFile.getProperty("key1");
+    }
+----
+[.topic.source]
+== Solution: Create a CDI Portable Extension
+
+[.statement]
+====
+
+ifdef::includegifs[]
+image::powerful.gif[role="pull-right", width="270"]
+endif::includegifs[]
+
+NOTE: One of the _most powerful feature_ of the CDI specification
+
+NOTE: Not really popularized, partly due to:
+
+. Their _high level of abstraction_
+. The good knowledge on Basic CDI and SPI
+. Lack of information (CDI is often reduced to a basic DI solution)
+====
+
 
