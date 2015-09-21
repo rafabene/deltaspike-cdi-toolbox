@@ -172,4 +172,63 @@ NOTE: Not really popularized, partly due to:
 . Lack of information (CDI is often reduced to a basic DI solution)
 ====
 
+[.intro]
+== What is DeltaSpike ?
+
+
+[.topic]
+== CDI & DeltaSpike
+
+====
+ifdef::includegifs[]
+image::hook.png[role="pull-left", width="30%"]
+endif::includegifs[]
+
+NOTE: CDI is a specification. It doesn’t provide business features
+
+NOTE: but it includes a powerful hook to add these business features
+
+NOTE: The "Poortable extensions" feature is this hook
+
+NOTE: Thanks to it, CDI can be easily enhanced with new high level features
+====
+
+[.topic]
+== Apache DeltaSpike is...
+
+====
+ifdef::includegifs[]
+image::toolbox.png[role="pull-right", width="40%"]
+endif::includegifs[]
+
+NOTE: A collection of ready to use extensions to help you in your projects
+
+NOTE: A toolbox to help you develop new CDI portable extensions
+
+NOTE: A great way to learn how to develop your own extension by browsing the source code
+
+NOTE: The most obvious entry point to CDI eco-system
+====
+
+[.topic]
+== Where does it come from ?
+
+====
+TODO Move content to here
+====
+
+[.topic]
+== A bit of history
+
+====
+TODO Move content to here
+====
+
+[.topic]
+== Modules and dependencies
+
+====
+TODO Move content to here
+====
+
 
