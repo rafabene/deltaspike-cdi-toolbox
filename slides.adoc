@@ -231,4 +231,180 @@ TODO Move content to here
 TODO Move content to here
 ====
 
+[.intro]
+== Module Core
+
+[.topic.source]
+== Core - Exception Handler
+
+
+[source, subs="verbatim,quotes", role="smaller"]
+----
+public class InventoryActions {
+    @PersistenceContext private EntityManager em;
+    [highlight]#@Inject private Event<ExceptionToCatchEvent> catchEvent#; <1>
+
+    public Integer queryForItem(Item item) {
+        try {
+          Query q = em.createQuery("SELECT i from Item i where i.id = :id");
+          q.setParameter("id", item.getId());
+          return q.getSingleResult();
+        } catch (PersistenceException e) {
+          [highlight]#catchEvent.fire(new ExceptionToCatchEvent(e))#; <2>
+        }
+    }
+}
+----
+
+<1> The _Event_ of generic type _ExceptionToCatchEvent_ is injected into your class for use later within a try/catch block.
+<2> The event is fired with a new instance of _ExceptionToCatchEvent_ constructed with the exception to be handled.
+
+[.topic.source]
+== Core - Exception Handler
+
+NOTE: Exceptions are handled asynchronously.
+
+[source, subs="verbatim,quotes", role="smaller"]
+----
+[highlight]#@ExceptionHandler#  <1>
+public class MyHandlers {
+    void printExceptions([highlight]#@Handles ExceptionEvent<Throwable> evt#) { <2>
+        System.out.println("Something bad happened:" +
+        [highlight]#evt.getException()#.getMessage());
+        [highlight]#evt.handleAndContinue()#; <3>
+    }
+}
+----
+<1> Exception handler methods are registered on beans annotated with _@ExceptionHandler_
+<2> The _@Handles_ annotation on the first parameter designates this method as an exception handler.
+<3> This handler does not modify the invocation of subsequent handlers, as designated by invoking _handleAndContinue()_.
+
+[.topic.source]
+== Core - Type-safe ProjectStage
+
+NOTE: The current _ProjectStage_ can be injected.
+
+[source, subs="verbatim,quotes"]
+----
+@Inject
+private ProjectStage [highlight]#projectStage#;
+
+//...
+
+boolean isDevProjectStage = ProjectStage.Development.equals(this.[highlight]#projectStage#);
+----
+
+NOTE: You can also use the _ProjectStage_ at XHTML files.
+[source, subs="verbatim,quotes", role="smaller"]
+----
+<h:panelGroup layout="block"rendered="#{applicationConfig.projectStage == 'Development'}" >
+    <!-- HTML Snippet is shown only in Development stage -->
+</h:panelGroup>
+----
+
+[.topic.source]
+== Core - Type-safe ProjectStage
+
+NOTE: Besides _custom ProjectStages_ it is possible to use the following pre-defined ProjectStages:
+
+. UnitTest
+. Development
+. SystemTest
+. IntegrationTest
+. Staging
+. Production
+
+NOTE: It can be set using _DeltaSpike Configuration_
+
+[source, subs="verbatim,quotes", role="smaller"]
+----
+-D [highlight]#org.apache.deltaspike.ProjectStage#=Development
+----
+
+[.topic.source]
+== Core - DeltaSpike Configuration Mechanism
+
+.Configuration API
+[source, subs="verbatim,quotes", role="smaller"]
+----
+String userName = ConfigResolver.getPropertyValue("user.name");  <1>
+String dbUserName = ConfigResolver.getPropertyAwarePropertyValue("db.username"); <2>
+[highlight]#Integer# dbPort = ConfigResolver
+    .resolve("db.port")  <3>
+    .as([highlight]#Integer.class#)
+    .withProjectStage(true)
+    .withDefault(3306)
+    .getValue();
+Date deadline = ConfigResolver.resolve("project.deadline") <4>
+  .as(Date.class, [highlight]#new CustomDateConverter()#).getValue());
+----
+
+.Properties
+[source, subs="verbatim,quotes", role="smaller"]
+----
+user.name = "Rafael"  <1>
+db.username.Production = "Antoine" <2>
+db.username.Development = "Benevides" <2>
+db.port = 1234 <3>
+project.deadline = 2017-04-01 <4>
+----
+
+[.topic.source]
+== Core - DeltaSpike Configuration Mechanism
+
+.Injection of configured values into beans using _@ConfigProperty_
+
+[source, subs="verbatim,quotes"]
+----
+@ApplicationScoped
+public class SomeRandomService
+{
+    @Inject
+    [highlight]#@ConfigProperty#(name = "endpoint.poll.interval")
+    private Integer pollInterval;
+
+    @Inject
+    [highlight]#@ConfigProperty#(name = "endpoint.poll.servername")
+    private String pollUrl;
+
+    ...
+ }
+----
+
+[.topic.source]
+== Core - DeltaSpike Configuration Mechanism
+
+icon:question-circle[] How to provide these Properties to DeltaSpike?
+
+NOTE: By default there are implementations for the following configuration sources (listed in the lookup order):
+
+. System properties
+
+. Environment properties
+
+. JNDI values - the base name is "java:comp/env/deltaspike/"
+
+. Properties file values -  default filename is "META-INF/apache-deltaspike.properties"
+
+TIP: You can also specify your own config file or create a custom _ConfigSource_ (example: read from XML, JSON, DB, etc)
+
+[.topic.source]
+== Core - Injecting Resources
+
+NOTE: DeltaSpike has simple APIs for performing basic resource loading and property file reading.
+
+[source, subs="verbatim,quotes"]
+----
+@Inject
+[highlight]#@InjectableResource#("myfile.properties")
+private InputStream is;
+
+public String getVersion() throws IOException {
+    try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+      return br.readLine();
+    }
+}
+----
+
+TIP: The _InjectableResourceProvider_ interface can be implemented to allow reading from alternate sources if needed (e.g. database LOBs, NoSQL storage areas).
 
