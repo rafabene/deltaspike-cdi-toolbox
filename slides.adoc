@@ -232,7 +232,7 @@ TODO Move content to here
 ====
 
 [.intro]
-== Module Core
+== Core Module
 
 [.topic.source]
 == Core - Exception Handler
@@ -322,6 +322,38 @@ NOTE: It can be set using _DeltaSpike Configuration_
 ----
 
 [.topic.source]
+== Core - @Exclude
+NOTE: It's like _@Vetoed_ from CDI 1.1 but better!
+
+.Excluding a Bean in any Case
+[source, subs="verbatim,quotes", role="smaller"]
+----
+[highlight]#@Exclude#
+public class NoBean{  }
+----
+
+.Excluding a Bean in Case of ProjectStageDevelopment
+[source, subs="verbatim,quotes", role="smaller"]
+----
+@Exclude([highlight]#ifProjectStage# = ProjectStage.Development.class)
+public class MyBean{  }
+----
+
+.Excluding a Bean if the ProjectStage is different from Development
+[source, subs="verbatim,quotes", role="smaller"]
+----
+@Exclude([highlight]#exceptIfProjectStage# = ProjectStage.Development.class)
+public class MyDevBean{ }
+----
+
+.Excluding a Bean based on an Expression which Evaluates to True
+[source, subs="verbatim,quotes", role="smaller"]
+----
+@Exclude([highlight]#onExpression# = "db==prodDB")
+public class DevDbBean {  }
+----
+
+[.topic.source]
 == Core - DeltaSpike Configuration Mechanism
 
 .Configuration API
@@ -408,3 +440,260 @@ public String getVersion() throws IOException {
 
 TIP: The _InjectableResourceProvider_ interface can be implemented to allow reading from alternate sources if needed (e.g. database LOBs, NoSQL storage areas).
 
+[.topic.source]
+== Core - Messages and i18n
+
+NOTE: Type-safe messages - Bean creation
+
+[source, subs="verbatim,quotes", role="smaller"]
+----
+@Named("msg")
+[highlight]#@MessageBundle#
+public interface MyMessages {
+
+    public String welcome();
+
+    //in the message bundle: [highlight]#welcometo#=Welcome to %s
+    public String welcomeTo(String username);
+
+    //in the message bundle: [highlight]#custom_message#=DeltaSpike is awesome!
+    [highlight]#@MessageTemplate("{custom_message}")#
+    public String message();
+}
+
+--> Create the Bundle files in the same package <--
+org/apache/deltaspike/example/message/MyMessages.properties
+org/apache/deltaspike/example/message/MyMessages_en.properties
+org/apache/deltaspike/example/message/MyMessages_de.properties
+----
+
+[.topic.source]
+== Core - Messages and i18n
+
+NOTE: Now the messages bean is ready to be used in Java Classes
+
+[source, subs="verbatim,quotes"]
+----
+@Inject
+private MyMessages [highlight]#messages#;
+//
+new FacesMessage([highlight]#messages#.welcomeTo("Rafael"));
+log.info([highlight]#messages#.message());
+----
+
+NOTE: ...or even inside JSF  because it uses a _@Named_ annotation.
+[source, subs="verbatim,quotes"]
+----
+<h1>#{msg.welcome}</h1>
+----
+
+[.intro]
+== Security Module
+
+[.topic.source]
+== Security Module - Simple interceptor-style authorization
+
+NOTE: Create the Annotation and the authorizer
+
+[source, subs="verbatim,quotes"]
+----
+@Retention(value = RetentionPolicy.RUNTIME)
+@Target({ ElementType.TYPE, ElementType.METHOD })
+@SecurityBindingType
+public @interface [highlight]#AdminOnly# {
+}
+
+@ApplicationScoped
+public class ApplicationAuthorizer
+{
+    [highlight]#@Secures#
+    [highlight]#@AdminOnly#
+    public boolean verifyPermission(InvocationContext invocationContext, BeanManager manager, @Loggged User user) throws Exception {
+      return user.getRole().equalsIgnoreCase("Admin");
+    }
+}
+----
+
+[.topic.source]
+== Security Module - Simple interceptor-style authorization
+
+NOTE: Now this annotation can be used in any method
+
+[source, subs="verbatim,quotes"]
+----
+@ApplicationScoped
+public class SecuredBean {
+
+    [highlight]#@AdminOnly#
+    public void doSomething() {
+        //...
+    }
+}
+----
+
+[.intro]
+== Data Module
+
+[.topic]
+== Data Module
+
+NOTE: Data module is an implementation of the _repository pattern_.
+
+NOTE: At the moment it only support RDBMS thru JPA.
+
+NOTE: But it could be extended to support other data services.
+
+[.topic.recap]
+== Repository pattern
+
+"A Repository represents +
+all objects of a certain type +
+as a conceptual set.
+
+It acts like a collection, +
+except with more elaborate +
+querying capability."
+
+TIP: -Eric Evans (in Domain Driven Design)
+
+[.topic.source]
+== Data Module - Repository definition
+
+[source, subs="verbatim,quotes"]
+----
+[highlight]#@Repository#
+public interface UserRepository extends [highlight]#EntityRepository<User, Long># {
+
+/* DeltaSpike creates a proxy which implements:
+count();
+findAll();
+findBy(PK);
+flush();
+refresh();
+remove();
+save();
+saveAndFlush();
+*/
+
+}
+----
+TIP: It uses the “partial bean” module to dynamically create implementation at runtime.
+
+[.topic.source]
+== Data Module - Making queries
+
+[source, subs="verbatim,quotes"]
+----
+@Repository
+public interface UserRepository extends EntityRepository<User, Long> {
+
+  public User [highlight]#findByUsernameAndPassword#(String username, char[] password); <1>
+
+  [highlight]#@Query#("SELECT u FROM User AS u WHERE u.role in (?1)") <2>
+  public List<Role> findByRoles(List<Role> roles);
+
+}
+----
+
+<1> The name of the method automatically creates the query. Example: +
+[highlight]#"SELECT u FROM User u WHERE u.username = ?1 AND u.password = ?2 "#
+
+<2> The query is defined inside the _@Query_ annotation.
+
+[.intro]
+== JSF Module
+
+[.topic.source]
+== JSF Module - JSF Messages
+
+[source, subs="verbatim,quotes"]
+----
+@MessageBundle
+public interface [highlight]#Messages# {
+
+    @MessageTemplate("Welcome to DeltaSpike")
+    String welcomeToDeltaSpike();
+
+}
+
+@Model
+public class MyJSFBean {
+
+    @Inject
+    private [highlight]#JsfMessage<Messages> messages#;
+
+    //...
+    [highlight]#messages.addInfo().welcomeToDeltaSpike()#;
+}
+----
+
+[.topic]
+== JSF Module - @WindowScoped
+
+NOTE: "The window-scope is like a session per window"
+
+[source, subs="verbatim,quotes"]
+----
+[highlight]#@WindowScoped#
+public class PreferencesBean implements Serializable {
+    //...
+}
+----
+
+TIP: "There isn't a lot of use-cases which need shared data between windows"
+
+[.topic.source]
+== JSF Module - Double-Submit Prevention
+
+NOTE: "To avoid that the same content of a form gets submitted and therefore processed multiple times"
+
+[source, subs="verbatim,quotes"]
+----
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      [highlight]#xmlns:ds="http://deltaspike.apache.org/jsf#">
+    <h:head>
+        <!-- head content -->
+    </h:head>
+    <h:body>
+        <h:form>
+            <!-- form content -->
+            [highlight]#<ds:preventDoubleSubmit/>#
+        </h:form>
+    </h:body>
+</html>
+----
+
+[.intro]
+== Scheduler Module
+
+[.topic.source]
+== Scheduler Module
+
+NOTE: Provides integration with Quartz.
+
+[source, subs="verbatim,quotes", role="smaller"]
+----
+// Job will execute each minute
+[highlight]#@Scheduled(cronExpression = "0 0/1 * * * ?", onStartup = false)#
+public class CdiAwareQuartzJob implements org.quartz.Job {
+
+    // And it can receive CDI injections
+    [highlight]#@Inject#
+    private AdminServices service;
+
+    @Override
+    public void execute(JobExecutionContext context) throws JobExecutionException {
+        service.executeAdministrativeTask();
+    }
+}
+----
+
+[source, subs="verbatim,quotes", role="smaller"]
+----
+@Inject
+private [highlight]#Scheduler<Job># jobScheduler;
+
+//...
+[highlight]#jobScheduler.registerNewJob(CdiAwareQuartzJob.class)#;
+----
