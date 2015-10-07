@@ -6,7 +6,6 @@ Antoine Sabot-Durand; Rafael Benevides
 :backend: dzslides
 :sectids!:
 :experimental:
-:toc2:
 :sectanchors:
 :idprefix:
 :idseparator: -
@@ -32,7 +31,7 @@ Antoine Sabot-Durand; Rafael Benevides
 
 ====
 * icon:user[] Senior Software Engineer
-* icon:user[] CDI co-spec lead, Java EE 8 EG
+* icon:user[] CDI spec lead, Java EE 8 EG
 * icon:institution[] Red Hat, Inc.
 * icon:twitter[] @antoine_sd
 * icon:rss[] www.next-presso.com
@@ -51,11 +50,42 @@ Antoine Sabot-Durand; Rafael Benevides
 ====
 
 [.topic.source]
+== Should I stay or should I go?
+
+====
+* icon:cogs[] A talk about CDI eco-system
+====
+
+====
+* icon:sign-in[] Don't need to be a CDI guru
+====
+
+====
+* icon:sign-out[] But you need to know CDI
+====
+
+
+
+[.topic.source]
+== Should I stay or should I go ?
+
+TIP: If you know the most of these you can stay
+
+[.split]
+* `@Inject`
+* `@Produces`
+* `Event<T>`
+* `@Observes`
+* `@Qualifier`
+* `InjectionPoint`
+
+
+
+[.topic.source]
 == Agenda
 
 [.recap]
 ====
-* icon:info-circle[] CDI Portable Extensions
 * icon:info-circle[] What is DeltaSpike ?
 * icon:info-circle[] Core Module
 * icon:info-circle[] Other DeltaSpike Modules
@@ -64,116 +94,9 @@ Antoine Sabot-Durand; Rafael Benevides
 TIP: Slides available at http://rafabene.github.io/deltaspike-cdi-toolbox/
 ====
 
-[.intro]
-== CDI Portable Extensions
-
-[.topic.source]
-== Portable extensions
-
-NOTE: OCP (Open Closed Principle) in CDI
-
-image::OCP-final.jpg[height="85%"]
-
-[.topic.source]
-== Extensions, what for?
-
-[.statement]
-====
-
-TIP: To integrate 3rd party libraries, frameworks or legacy components
-
-TIP: To change existing configuration or behavior
-
-TIP: To extend CDI and Java EE
-
-TIP: Thanks to them, Java EE can evolve between major releases
-
-====
-
-[.topic.source]
-== Extensions, how?
-
-[.statement]
-====
-
-ifdef::includegifs[]
-image::rubik.gif[role="pull-right", width="250"]
-endif::includegifs[]
-
-TIP: Implement _javax.enterprise.inject.spi.Extension_
-
-TIP: Register the Extension
-
-TIP: Observe SPI events at boot time related to the bean manager lifecycle
-
-====
-
-
-[.topic.source]
-== More concretely
-
-NOTE: Service provider of the service `javax.enterprise.inject.spi.Extension` declared in `META-INF/services`
-
-TIP: Just put the fully qualified name of your extension class in this file
-
-[source, subs="verbatim,quotes", role="smaller"]
-----
-import javax.enterprise.event.Observes;
-import javax.enterprise.inject.spi.Extension;
-
-public class CdiExtension [highlight]#implements Extension# {
-
-    void beforeBeanDiscovery([highlight]#@Observes BeforeBeanDiscovery# bbd) {
-    }
-    //...
-
-    void afterDeploymentValidation([highlight]#@Observes AfterDeploymentValidation# adv) {
-    }
-}
-----
-[.topic.source]
-== Example: Injecting a String from a Properties file
-
-[source]
-----
-    @Inject @Property("key1")
-    private String property1;
-
-    @Inject @Property("key2")
-    private String property2;
-----
-NOTE: It can be achieved by @Produces but it could lead to: _Unsatisfied dependencies for type String with qualifiers @Property..._
-
-[source]
-----
-    @Produces
-    @Property("key1")
-    public String propriedade1Producer()
-    {
-        return propertiesFile.getProperty("key1");
-    }
-----
-[.topic.source]
-== Solution: Create a CDI Portable Extension
-
-[.statement]
-====
-
-ifdef::includegifs[]
-image::powerful.gif[role="pull-right", width="270"]
-endif::includegifs[]
-
-NOTE: One of the _most powerful feature_ of the CDI specification
-
-NOTE: Not really popularized, partly due to:
-
-. Their _high level of abstraction_
-. The good knowledge on Basic CDI and SPI
-. Lack of information (CDI is often reduced to a basic DI solution)
-====
-
-[.intro]
+[.intro2]
 == What is DeltaSpike ?
+image:ds_logo.png[float="right",align="center",width="80%"]
 
 
 [.topic]
@@ -188,7 +111,7 @@ NOTE: CDI is a specification. It doesn’t provide business features
 
 NOTE: but it includes a powerful hook to add these business features
 
-NOTE: The "Poortable extensions" feature is this hook
+NOTE: The "Portable extensions" feature is this hook
 
 NOTE: Thanks to it, CDI can be easily enhanced with new high level features
 ====
@@ -210,25 +133,31 @@ NOTE: A great way to learn how to develop your own extension by browsing the sou
 NOTE: The most obvious entry point to CDI eco-system
 ====
 
-[.topic]
+[.title]
 == Where does it come from ?
 
+[.margin10]
 ====
-TODO Move content to here
+image:ds_history.png[width="95%"]
 ====
 
 [.topic]
 == A bit of history
-
+[.smaller]
 ====
-TODO Move content to here
+* icon:calendar[] *Dec 2011:* project launch
+* icon:calendar[] *Feb 2012:* version 0.1
+* icon:calendar[] *Feb 2012:* version 0.4 (out of incubator)
+* icon:calendar[] *June 2014:* version 1.0
+* icon:calendar[] *August 2015:* version 1.5
 ====
 
-[.topic]
+
+[.title]
 == Modules and dependencies
 
 ====
-TODO Move content to here
+image:modules.png[width="100%"]
 ====
 
 [.intro]
@@ -697,3 +626,16 @@ private [highlight]#Scheduler<Job># jobScheduler;
 //...
 [highlight]#jobScheduler.registerNewJob(CdiAwareQuartzJob.class)#;
 ----
+
+[.topic]
+== Want more session on CDI?
+
+icon:cogs[] *TUT2376:* Advanced CDI in live coding
+
+icon:clock-o[] Tuesday 27th at 8:30
+
+icon:building-o[] Cyril Magnin II / III
+
+icon:user[] Antonin Stefanutti & Antoine SD
+
+
