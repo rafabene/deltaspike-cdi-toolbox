@@ -27,26 +27,26 @@ Antoine Sabot-Durand; Rafael Benevides
 :includegifs:
 
 [.topic.source]
-== Antoine Sabot-Durand
-
-====
-* icon:user[] Senior Software Engineer
-* icon:user[] CDI spec lead, Java EE 8 EG
-* icon:institution[] Red Hat, Inc.
-* icon:twitter[] @antoine_sd
-* icon:rss[] www.next-presso.com
-* icon:github[] github.com/antoinesd
-====
-
-[.topic.source]
 == Rafael Benevides
 
 ====
 * icon:user[] Senior Software Engineer
-* icon:user[] DeltaSpike P.M.C member
-* icon:institution[] Red Hat, Inc.
+* icon:code[] DeltaSpike P.M.C member
+* icon:linux[] Red Hat, Inc.
 * icon:twitter[] @rafabene
 * icon:github[] github.com/rafabene
+====
+
+
+[.topic.source]
+== Antoine Sabot-Durand
+
+====
+* icon:code[] CDI spec lead
+* icon:linux[] Red Hat, Inc.
+* icon:twitter[] @antoine_sd
+* icon:rss[] next-presso.com
+* icon:github[] github.com/antoinesd
 ====
 
 [.topic.source]
