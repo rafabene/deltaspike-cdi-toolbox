@@ -154,6 +154,30 @@ image:ds_history.png[width="95%"]
 ====
 
 
+[.source]
+== Deltaspike is for all CDI developers
+
+TIP: While this talk is focused on classical project developers...
+
+TIP: ...advanced developers may find interesting helpers in Deltaspike
+
+TIP: For instance metadata builder are useful for portable extension developers
+
+[source, subs="verbatim,quotes", role="smallest"]
+----
+public void registerGenericBeans(@Observes AfterBeanDiscovery abd) {
+     BeanBuilder<User> ubb = new BeanBuilder<User>(beanManager).readFromType(User.class)
+             .passivationCapable(true)
+             .addTypes(otherTypes);
+     if (weAreOnWeb)
+         ubb.scope(SessionScoped.class);
+     else 
+        ubb.scope(ApplicationScoped.class);
+     abd.addBean(ubb.create());
+ }
+----
+
+
 [.title]
 == Modules and dependencies
 
