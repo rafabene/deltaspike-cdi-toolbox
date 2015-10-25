@@ -517,18 +517,18 @@ TIP: -Eric Evans (in Domain Driven Design)
 ----
 [highlight]#@Repository#
 public interface UserRepository extends [highlight]#EntityRepository<User, Long># {
-
 /* DeltaSpike creates a proxy which implements:
-count();
-findAll();
-findBy(PK);
-flush();
-refresh();
-remove();
-save();
-saveAndFlush();
-*/
 
+Long count();
+List<E> findAll();
+E findBy(PK);
+void flush();
+void refresh();
+void remove(E);
+E save(E);
+E saveAndFlush(E);
+
+...and many others */
 }
 ----
 TIP: It uses the “partial bean” module to dynamically create implementation at runtime.
