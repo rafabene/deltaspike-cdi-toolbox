@@ -342,8 +342,6 @@ NOTE: By default there are implementations for the following configuration sourc
 
 TIP: You can also specify your own config file or create a custom _ConfigSource_ (example: read from XML, JSON, DB, etc)
 
-base LOBs, NoSQL storage areas).
-
 [.topic.source]
 == Core - Messages and i18n
 
@@ -357,19 +355,14 @@ public interface MyMessages {
 
     public String welcome();
 
-    //in the message bundle: [highlight]#welcometo#=Welcome to %s
-    public String welcomeTo(String username);
+    public String welcomeTo(String username); <1>
 
-    //in the message bundle: [highlight]#custom_message#=DeltaSpike is awesome!
-    [highlight]#@MessageTemplate("{custom_message}")#
+    [highlight]#@MessageTemplate("{custom_message}")#  //<2>
     public String message();
 }
-
---> Create the Bundle files in the same package <--
-org/apache/deltaspike/example/message/MyMessages.properties
-org/apache/deltaspike/example/message/MyMessages_en.properties
-org/apache/deltaspike/example/message/MyMessages_de.properties
 ----
+<1> in the message bundle: [highlight]#welcometo#=Welcome to %s
+<2> in the message bundle: [highlight]#custom_message#=DeltaSpike is awesome!
 
 [.topic.source]
 == Core - Messages and i18n
@@ -390,6 +383,8 @@ NOTE: ...or even inside JSF  because it uses a _@Named_ annotation.
 ----
 <h1>#{msg.welcome}</h1>
 ----
+
+TIP: It uses the “partial bean” module to dynamically create implementation at runtime.
 
 [.topic.source]
 == Core - @Exclude
@@ -450,7 +445,7 @@ TIP: The _InjectableResourceProvider_ interface can be implemented to allow read
 [.topic.source]
 == Security Module - Simple interceptor-style authorization
 
-NOTE: Create the Annotation and the authorizer
+NOTE: Type-safe authorization
 
 [source, subs="verbatim,quotes"]
 ----
@@ -461,29 +456,30 @@ public @interface [highlight]#AdminOnly# {
 }
 
 @ApplicationScoped
-public class ApplicationAuthorizer
-{
-    [highlight]#@Secures#
-    [highlight]#@AdminOnly#
-    public boolean verifyPermission(InvocationContext invocationContext, BeanManager manager, @Loggged User user) throws Exception {
-      return user.getRole().equalsIgnoreCase("Admin");
-    }
-}
-----
-
-[.topic.source]
-== Security Module - Simple interceptor-style authorization
-
-NOTE: Now this annotation can be used in any method
-
-[source, subs="verbatim,quotes"]
-----
-@ApplicationScoped
 public class SecuredBean {
 
     [highlight]#@AdminOnly#
     public void doSomething() {
         //...
+    }
+}
+
+----
+
+[.topic.source]
+== Security Module - Simple interceptor-style authorization
+
+NOTE: An interceptor-style class is used to define the access 
+
+[source, subs="verbatim,quotes"]
+----
+@ApplicationScoped
+public class ApplicationAuthorizer {
+
+    [highlight]#@Secures#
+    [highlight]#@AdminOnly#
+    public boolean verifyPermission(InvocationContext invocationContext, BeanManager manager, @Loggged User user) throws Exception {
+      return user.getRole().equalsIgnoreCase("Admin");
     }
 }
 ----
