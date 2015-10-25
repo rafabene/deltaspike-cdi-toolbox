@@ -153,6 +153,21 @@ image:ds_history.png[width="95%"]
 * icon:calendar[] *August 2015:* version 1.5
 ====
 
+[.topic]
+== DeltaSpike is tested with
+
+[.smallest]
+====
+* icon:cogs[] _CDI_ 1.0, 1.1, 1.2 and 2.0
+* icon:cogs[] JBoss _Weld_ and Apache _OpenWebBeans_
+* icon:cogs[] _JBoss AS_ 7.x, _WildFly_ 8.x - 10.x
+* icon:cogs[] JBoss _EAP_ 6.x - 7.x
+* icon:cogs[] Apache _TomEE_ 1.0.x - 1.7.x
+* icon:cogs[] Oracle _GlassFish_ 3.x, 4.x
+* icon:cogs[] Oracle _Weblogic_ 12c
+* icon:cogs[] IBM _Websphere_ 8.x
+
+====
 
 [.source]
 == Deltaspike is for all CDI developers
@@ -499,15 +514,14 @@ NOTE: But it could be extended to support other data services.
 [.topic.recap]
 == Repository pattern
 
+[quote, Eric Evans, Domain Driven Design, role="smallest"]
+____
 "A Repository represents +
-all objects of a certain type +
-as a conceptual set.
+ all objects of a certain type as +
+ a conceptual set.
 
-It acts like a collection, +
-except with more elaborate +
-querying capability."
-
-TIP: -Eric Evans (in Domain Driven Design)
+It acts like a collection, except with more elaborate querying capability."
+____
 
 [.topic.source]
 == Data Module - Repository definition
