@@ -34,6 +34,7 @@ Antoine Sabot-Durand; Rafael Benevides
 * icon:code[] DeltaSpike P.M.C member
 * icon:linux[] Red Hat, Inc.
 * icon:twitter[] @rafabene
+* icon:rss[] rafabene.com
 * icon:github[] github.com/rafabene
 ====
 
@@ -289,7 +290,7 @@ public class DevDbBean {  }
 [source, subs="verbatim,quotes", role="smaller"]
 ----
 String userName = ConfigResolver.getPropertyValue("user.name");  <1>
-String dbUserName = ConfigResolver.getPropertyAwarePropertyValue("db.username"); <2>
+String dbUserName = ConfigResolver.getProjectStageAwarePropertyValue("db.username"); <2>
 [highlight]#Integer# dbPort = ConfigResolver
     .resolve("db.port")  <3>
     .as([highlight]#Integer.class#)
