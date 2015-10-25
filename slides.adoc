@@ -148,7 +148,7 @@ image:ds_history.png[width="95%"]
 ====
 * icon:calendar[] *Dec 2011:* project launch
 * icon:calendar[] *Feb 2012:* version 0.1
-* icon:calendar[] *Feb 2012:* version 0.4 (out of incubator)
+* icon:calendar[] *May 2013:* version 0.4 (out of incubator)
 * icon:calendar[] *June 2014:* version 1.0
 * icon:calendar[] *August 2015:* version 1.5
 ====
@@ -276,38 +276,6 @@ NOTE: It can be set using _DeltaSpike Configuration_
 ----
 
 [.topic.source]
-== Core - @Exclude
-NOTE: It's like _@Vetoed_ from CDI 1.1 but better!
-
-.Excluding a Bean in any Case
-[source, subs="verbatim,quotes", role="smaller"]
-----
-[highlight]#@Exclude#
-public class NoBean{  }
-----
-
-.Excluding a Bean in Case of ProjectStageDevelopment
-[source, subs="verbatim,quotes", role="smaller"]
-----
-@Exclude([highlight]#ifProjectStage# = ProjectStage.Development.class)
-public class MyBean{  }
-----
-
-.Excluding a Bean if the ProjectStage is different from Development
-[source, subs="verbatim,quotes", role="smaller"]
-----
-@Exclude([highlight]#exceptIfProjectStage# = ProjectStage.Development.class)
-public class MyDevBean{ }
-----
-
-.Excluding a Bean based on an Expression which Evaluates to True
-[source, subs="verbatim,quotes", role="smaller"]
-----
-@Exclude([highlight]#onExpression# = "db==prodDB")
-public class DevDbBean {  }
-----
-
-[.topic.source]
 == Core - DeltaSpike Configuration Mechanism
 
 .Configuration API
@@ -374,25 +342,7 @@ NOTE: By default there are implementations for the following configuration sourc
 
 TIP: You can also specify your own config file or create a custom _ConfigSource_ (example: read from XML, JSON, DB, etc)
 
-[.topic.source]
-== Core - Injecting Resources
-
-NOTE: DeltaSpike has simple APIs for performing basic resource loading and property file reading.
-
-[source, subs="verbatim,quotes"]
-----
-@Inject
-[highlight]#@InjectableResource#("myfile.properties")
-private InputStream is;
-
-public String getVersion() throws IOException {
-    try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
-      return br.readLine();
-    }
-}
-----
-
-TIP: The _InjectableResourceProvider_ interface can be implemented to allow reading from alternate sources if needed (e.g. database LOBs, NoSQL storage areas).
+base LOBs, NoSQL storage areas).
 
 [.topic.source]
 == Core - Messages and i18n
@@ -440,6 +390,59 @@ NOTE: ...or even inside JSF  because it uses a _@Named_ annotation.
 ----
 <h1>#{msg.welcome}</h1>
 ----
+
+[.topic.source]
+== Core - @Exclude
+NOTE: It's like _@Vetoed_ from CDI 1.1 but better!
+
+.Excluding a Bean in any Case
+[source, subs="verbatim,quotes", role="smaller"]
+----
+[highlight]#@Exclude#
+public class NoBean{  }
+----
+
+.Excluding a Bean in Case of ProjectStageDevelopment
+[source, subs="verbatim,quotes", role="smaller"]
+----
+@Exclude([highlight]#ifProjectStage# = ProjectStage.Development.class)
+public class MyBean{  }
+----
+
+.Excluding a Bean if the ProjectStage is different from Development
+[source, subs="verbatim,quotes", role="smaller"]
+----
+@Exclude([highlight]#exceptIfProjectStage# = ProjectStage.Development.class)
+public class MyDevBean{ }
+----
+
+.Excluding a Bean based on an Expression which Evaluates to True
+[source, subs="verbatim,quotes", role="smaller"]
+----
+@Exclude([highlight]#onExpression# = "db==prodDB")
+public class DevDbBean {  }
+----
+
+
+[.topic.source]
+== Core - Injecting Resources
+
+NOTE: DeltaSpike has simple APIs for performing basic resource loading and property file reading.
+
+[source, subs="verbatim,quotes"]
+----
+@Inject
+[highlight]#@InjectableResource#("myfile.properties")
+private InputStream is;
+
+public String getVersion() throws IOException {
+    try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+      return br.readLine();
+    }
+}
+----
+
+TIP: The _InjectableResourceProvider_ interface can be implemented to allow reading from alternate sources if needed (e.g. data
 
 [.intro]
 == Security Module
@@ -664,3 +667,5 @@ icon:building-o[] Cyril Magnin II / III
 icon:user[] Antonin Stefanutti & Antoine SD
 
 
+[.intro]
+== Questions ???
