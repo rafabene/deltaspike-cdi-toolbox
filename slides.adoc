@@ -30,7 +30,6 @@ Antoine Sabot-Durand; Rafael Benevides
 == Rafael Benevides
 
 ====
-* icon:user[] Senior Software Engineer
 * icon:code[] DeltaSpike P.M.C member
 * icon:linux[] Red Hat, Inc.
 * icon:twitter[] @rafabene
@@ -197,7 +196,7 @@ public void registerGenericBeans(@Observes AfterBeanDiscovery abd) {
 == Modules and dependencies
 
 ====
-image:modules.png[width="100%"]
+image:modules.png[width="90%", align="center", float="right"]
 ====
 
 [.intro]
@@ -260,7 +259,7 @@ private ProjectStage [highlight]#projectStage#;
 
 //...
 
-boolean isDevProjectStage = ProjectStage.Development.equals(this.[highlight]#projectStage#);
+boolean isDevelopment = ProjectStage.Development.equals(this.[highlight]#projectStage#);
 ----
 
 NOTE: You can also use the _ProjectStage_ at XHTML files.
@@ -274,7 +273,7 @@ NOTE: You can also use the _ProjectStage_ at XHTML files.
 [.topic.source]
 == Core - Type-safe ProjectStage
 
-NOTE: Besides _custom ProjectStages_ it is possible to use the following pre-defined ProjectStages:
+NOTE: DeltaSpike comes with the following pre-defined ProjectStages:
 
 . UnitTest
 . Development
@@ -283,12 +282,25 @@ NOTE: Besides _custom ProjectStages_ it is possible to use the following pre-def
 . Staging
 . Production
 
-NOTE: It can be set using _DeltaSpike Configuration_
+TIP: But you can create your own _custom ProjectStages_.
+
+
+[.topic.source]
+== Core - Project Stage Configuration
+
+NOTE: It can be set using _DeltaSpike Configuration Mechanism_
 
 [source, subs="verbatim,quotes", role="smaller"]
 ----
 -D [highlight]#org.apache.deltaspike.ProjectStage#=Development
 ----
+
+icon:question-circle[] How to provide these Key/Values to DeltaSpike?
+
+. System properties
+. Environment properties
+. JNDI values - the base name is "java:comp/env/deltaspike/"
+. Properties file values -  default filename is "META-INF/apache-deltaspike.properties"
 
 [.topic.source]
 == Core - DeltaSpike Configuration Mechanism
@@ -308,7 +320,7 @@ Date deadline = ConfigResolver.resolve("project.deadline") <4>
   .as(Date.class, [highlight]#new CustomDateConverter()#).getValue());
 ----
 
-.Properties
+.Properties (Key / Value)
 [source, subs="verbatim,quotes", role="smaller"]
 ----
 user.name = "Rafael"  <1>
@@ -339,23 +351,6 @@ public class SomeRandomService
     ...
  }
 ----
-
-[.topic.source]
-== Core - DeltaSpike Configuration Mechanism
-
-icon:question-circle[] How to provide these Properties to DeltaSpike?
-
-NOTE: By default there are implementations for the following configuration sources (listed in the lookup order):
-
-. System properties
-
-. Environment properties
-
-. JNDI values - the base name is "java:comp/env/deltaspike/"
-
-. Properties file values -  default filename is "META-INF/apache-deltaspike.properties"
-
-TIP: You can also specify your own config file or create a custom _ConfigSource_ (example: read from XML, JSON, DB, etc)
 
 [.topic.source]
 == Core - Messages and i18n
@@ -455,6 +450,97 @@ public String getVersion() throws IOException {
 TIP: The _InjectableResourceProvider_ interface can be implemented to allow reading from alternate sources if needed (e.g. data
 
 [.intro]
+== Data Module
+
+[.topic]
+== Data Module
+
+NOTE: Data module is an implementation of the _repository pattern_.
+
+NOTE: At the moment it only support RDBMS thru JPA.
+
+NOTE: But it could be extended to support other data services.
+
+[.topic.recap]
+== Repository pattern
+
+[quote, Eric Evans, Domain Driven Design, role="smallest"]
+____
+"A Repository represents +
+ all objects of a certain type as +
+ a conceptual set.
+
+It acts like a collection, except with more elaborate querying capability."
+____
+
+[.topic.source]
+== Data Module - Creating a Repository
+
+[source, subs="verbatim,quotes"]
+----
+[highlight]#@Repository#
+public interface UserRepository extends [highlight]#EntityRepository<User, Long># {
+/* DeltaSpike creates a proxy which implements:
+
+Long count();
+List<E> findAll();
+E findBy(PK);
+void flush();
+void refresh();
+void remove(E);
+E save(E);
+E saveAndFlush(E);
+
+...and many others */
+}
+----
+TIP: It uses the “partial bean” module to dynamically create implementation at runtime.
+
+[.topic.source]
+== Data Module - Making queries
+
+[source, subs="verbatim,quotes"]
+----
+@Repository
+public interface UserRepository extends EntityRepository<User, Long> {
+
+  public User [highlight]#findByUsernameAndPassword#(String username, char[] password); <1>
+
+  [highlight]#@Query#("SELECT u FROM User AS u WHERE u.role in (?1)") <2>
+  public List<Role> findByRoles(List<Role> roles);
+  
+}
+----
+
+<1> The name of the method automatically creates the query. Example: +
+[highlight]#"SELECT u FROM User u WHERE u.username = ?1 AND u.password = ?2 "#
+
+<2> The query is defined inside the _@Query_ annotation.
+
+[.topic.source]
+== Data Module - Pagination
+
+[source, subs="verbatim,quotes"]
+----
+@Repository
+public interface UserRepository extends EntityRepository<User, Long> {
+
+  @Query("select p from Person p where p.age between ?1 and ?2")
+  [highlight]#QueryResult<Person># findAllByAge(int minAge, int maxAge);
+
+}
+
+QueryResult<Person> paged = personRepository.findByAge(age)
+
+// Query API style
+paged.maxResults(10).firstResult(50).getResultList();
+
+// or paging style
+paged.withPageSize(10).toPage(5).getResultList();
+
+int totalPages = paged.countPages();
+----
+[.intro]
 == Security Module
 
 [.topic.source]
@@ -498,74 +584,6 @@ public class ApplicationAuthorizer {
     }
 }
 ----
-
-[.intro]
-== Data Module
-
-[.topic]
-== Data Module
-
-NOTE: Data module is an implementation of the _repository pattern_.
-
-NOTE: At the moment it only support RDBMS thru JPA.
-
-NOTE: But it could be extended to support other data services.
-
-[.topic.recap]
-== Repository pattern
-
-[quote, Eric Evans, Domain Driven Design, role="smallest"]
-____
-"A Repository represents +
- all objects of a certain type as +
- a conceptual set.
-
-It acts like a collection, except with more elaborate querying capability."
-____
-
-[.topic.source]
-== Data Module - Repository definition
-
-[source, subs="verbatim,quotes"]
-----
-[highlight]#@Repository#
-public interface UserRepository extends [highlight]#EntityRepository<User, Long># {
-/* DeltaSpike creates a proxy which implements:
-
-Long count();
-List<E> findAll();
-E findBy(PK);
-void flush();
-void refresh();
-void remove(E);
-E save(E);
-E saveAndFlush(E);
-
-...and many others */
-}
-----
-TIP: It uses the “partial bean” module to dynamically create implementation at runtime.
-
-[.topic.source]
-== Data Module - Making queries
-
-[source, subs="verbatim,quotes"]
-----
-@Repository
-public interface UserRepository extends EntityRepository<User, Long> {
-
-  public User [highlight]#findByUsernameAndPassword#(String username, char[] password); <1>
-
-  [highlight]#@Query#("SELECT u FROM User AS u WHERE u.role in (?1)") <2>
-  public List<Role> findByRoles(List<Role> roles);
-
-}
-----
-
-<1> The name of the method automatically creates the query. Example: +
-[highlight]#"SELECT u FROM User u WHERE u.username = ?1 AND u.password = ?2 "#
-
-<2> The query is defined inside the _@Query_ annotation.
 
 [.intro]
 == JSF Module
