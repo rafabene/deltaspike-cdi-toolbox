@@ -1204,6 +1204,48 @@ section {
 <div class="admonitionblock note"><table><tr><td class="icon"><i class="fa icon-note" title="Note"></i></td><td class="content">but it includes a powerful hook to add these business features</td></tr></table></div>
 <div class="admonitionblock note"><table><tr><td class="icon"><i class="fa icon-note" title="Note"></i></td><td class="content">The "Portable extensions" feature is this hook</td></tr></table></div>
 <div class="admonitionblock note"><table><tr><td class="icon"><i class="fa icon-note" title="Note"></i></td><td class="content">Thanks to it, CDI can be easily enhanced with new high level features</td></tr></table></div></div></div></section>
+<section class="topic source"><h2>CDI Portable extensions</h2><div class="exampleblock statement"><div class="content"><img class="pull-right" src="images/powerful.gif" alt="powerful" width="270">
+<div class="admonitionblock note"><table><tr><td class="icon"><i class="fa icon-note" title="Note"></i></td><td class="content">One of the <em>most powerful feature</em> of the CDI specification</td></tr></table></div>
+<div class="admonitionblock note"><table><tr><td class="icon"><i class="fa icon-note" title="Note"></i></td><td class="content">Not really popularized, partly due to:</td></tr></table></div>
+<ol class="arabic"><li>Their <em>high level of abstraction</em></li><li>The good knowledge on Basic CDI and SPI</li><li>Lack of information (CDI is often reduced to a basic DI solution)</li></ol></div></div></section>
+<section class="topic source"><h2>Extensions, what for?</h2><div class="exampleblock statement"><div class="content"><div class="admonitionblock tip"><table><tr><td class="icon"><i class="fa icon-tip" title="Tip"></i></td><td class="content">To integrate 3rd party libraries, frameworks or legacy components</td></tr></table></div>
+<div class="admonitionblock tip"><table><tr><td class="icon"><i class="fa icon-tip" title="Tip"></i></td><td class="content">To change existing configuration or behavior</td></tr></table></div>
+<div class="admonitionblock tip"><table><tr><td class="icon"><i class="fa icon-tip" title="Tip"></i></td><td class="content">To extend CDI and Java EE</td></tr></table></div>
+<div class="admonitionblock tip"><table><tr><td class="icon"><i class="fa icon-tip" title="Tip"></i></td><td class="content">Thanks to them, Java EE can evolve between major releases</td></tr></table></div></div></div></section>
+<section class="topic source"><h2>Extensions, how?</h2><div class="exampleblock statement"><div class="content"><img class="pull-right" src="images/rubik.gif" alt="rubik" width="250">
+<div class="admonitionblock tip"><table><tr><td class="icon"><i class="fa icon-tip" title="Tip"></i></td><td class="content">Observing SPI events at boot time related to the bean manager lifecycle</td></tr></table></div>
+<div class="admonitionblock tip"><table><tr><td class="icon"><i class="fa icon-tip" title="Tip"></i></td><td class="content">Checking what meta-data are being created</td></tr></table></div>
+<div class="admonitionblock tip"><table><tr><td class="icon"><i class="fa icon-tip" title="Tip"></i></td><td class="content">Modifying these meta-data or creating new ones</td></tr></table></div></div></div></section>
+<section class="topic source"><h2>More concretely</h2><div class="admonitionblock note"><table><tr><td class="icon"><i class="fa icon-note" title="Note"></i></td><td class="content">Service provider of the service <code>javax.enterprise.inject.spi.Extension</code> declared in <code>META-INF/services</code></td></tr></table></div>
+<div class="admonitionblock tip"><table><tr><td class="icon"><i class="fa icon-tip" title="Tip"></i></td><td class="content">Just put the fully qualified name of your extension class in this file</td></tr></table></div>
+<div class="listingblock smaller"><pre class="highlight"><code class="java">import javax.enterprise.event.Observes;
+import javax.enterprise.inject.spi.Extension;
+
+public class CdiExtension <span class="highlight">implements Extension</span> {
+
+    void beforeBeanDiscovery(<span class="highlight">@Observes BeforeBeanDiscovery</span> bbd) {
+    }
+    //...
+
+    void afterDeploymentValidation(<span class="highlight">@Observes AfterDeploymentValidation</span> adv) {
+    }
+}</code></pre></div></section>
+<section class="topic source"><h2>Bean manager lifecycle</h2><img src="images/lifecycle-simple.svg" alt="lifecycle simple" width="95%" height="85%">
+<img class="pull-right" src="images/lifecycle-legend.svg" alt="lifecycle legend" width="230" height="40"></section>
+<section class="topic source"><h2>Example: Ignoring JPA entities</h2><div class="admonitionblock tip"><table><tr><td class="icon"><i class="fa icon-tip" title="Tip"></i></td><td class="content">The following extension prevents CDI to manage entities</td></tr></table></div>
+<div class="admonitionblock note"><table><tr><td class="icon"><i class="fa icon-note" title="Note"></i></td><td class="content">This is a commonly admitted good practice</td></tr></table></div>
+<div class="listingblock"><pre class="highlight"><code class="java">public class VetoEntity implements Extension {
+
+    void vetoEntity(@Observes @WithAnnotations(Entity.class)
+                    ProcessAnnotatedType&lt;?&gt; pat) {
+        pat.veto();
+    }
+}</code></pre></div></section>
+<section class="topic recap"><h2>Remember</h2><p><span class="icon"><i class="fa fa-warning"></i></span> Extensions are <em>launched during<br>
+  bootstrap</em> and are <em>based on CDI events</em></p>
+<p><span class="icon"><i class="fa fa-warning"></i></span> Once the application is bootstrapped,<br>
+  the Bean Manager is in <em>read-only mode</em> (no runtime bean registration)</p>
+<p><span class="icon"><i class="fa fa-warning"></i></span> You only have to <code>@Observes</code> <em>built-in CDI events</em> to create your extensions</p></section>
 <section class="topic"><h2>Apache DeltaSpike is&#8230;&#8203;</h2><div class="exampleblock"><div class="content"><img class="pull-right" src="images/toolbox.png" alt="toolbox" width="40%">
 <div class="admonitionblock note"><table><tr><td class="icon"><i class="fa icon-note" title="Note"></i></td><td class="content">A collection of ready to use extensions to help you in your projects</td></tr></table></div>
 <div class="admonitionblock note"><table><tr><td class="icon"><i class="fa icon-note" title="Note"></i></td><td class="content">A toolbox to help you develop new CDI portable extensions</td></tr></table></div>
@@ -1225,6 +1267,10 @@ section {
         ubb.scope(ApplicationScoped.class);
      abd.addBean(ubb.create());
  }</code></pre></div></section>
+<section class="topic"><h2>More on DeltaSpike</h2><div class="exampleblock statement"><div class="content"><img class="pull-right" src="images/DukeChoice.png" alt="DukeChoice" width="10%">
+<div class="admonitionblock caution"><table><tr><td class="icon"><i class="fa icon-caution" title="Caution"></i></td><td class="content">Apache DeltaSpike received <strong>Duke&#8217;s choice award 2014</strong></td></tr></table></div>
+<div class="admonitionblock caution"><table><tr><td class="icon"><i class="fa icon-caution" title="Caution"></i></td><td class="content">This talk shows only a small part of the framework</td></tr></table></div>
+<div class="admonitionblock caution"><table><tr><td class="icon"><i class="fa icon-caution" title="Caution"></i></td><td class="content">More info on: <a href="https://deltaspike.apache.org/" class="bare">deltaspike.apache.org/</a></td></tr></table></div></div></div></section>
 <section class="title"><h2>Modules and dependencies</h2><div class="exampleblock"><div class="content"><p><span class="image" style="float: right"><img src="images/modules.png" alt="modules" width="90%"></span></p></div></div></section>
 <section class="intro"><h2>Core Module</h2></section>
 <section class="topic source"><h2>Core - Exception Handler</h2><div class="listingblock smaller"><pre class="highlight"><code class="java">public class InventoryActions {
@@ -1476,11 +1522,11 @@ private <span class="highlight">Scheduler&lt;Job&gt;</span> jobScheduler;
 
 //...
 <span class="highlight">jobScheduler.registerNewJob(CdiAwareQuartzJob.class)</span>;</code></pre></div></section>
-<section class="topic"><h2>Want more session on CDI?</h2><p><span class="icon"><i class="fa fa-cogs"></i></span> <strong>TUT2376:</strong> Advanced CDI in live coding</p>
+<section class="topic"><h2>Want to go farther on CDI?</h2><p><span class="icon"><i class="fa fa-cogs"></i></span> <strong>TUT2376:</strong> Advanced CDI in live coding</p>
 <p><span class="icon"><i class="fa fa-clock-o"></i></span> Tuesday 27th at 8:30</p>
 <p><span class="icon"><i class="fa fa-building-o"></i></span> Cyril Magnin II / III</p>
 <p><span class="icon"><i class="fa fa-user"></i></span> Antonin Stefanutti &amp; Antoine SD</p></section>
-<section class="intro"><h2>Questions ???</h2></section><script>
+<section class="topic"><h2>Questions ???</h2><p class="statement"><a href="https://deltaspike.apache.org/" class="bare">deltaspike.apache.org/</a></p></section><script>
 //   __  __  __       .  __   ___  __
 //  |  \  / /__` |    | |  \ |__  /__`
 //  |__/ /_ .__/ |___ | |__/ |___ .__/ core :€
