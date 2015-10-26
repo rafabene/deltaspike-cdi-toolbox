@@ -1199,6 +1199,8 @@ section {
 <section class="topic source"><h2>Agenda</h2><div class="exampleblock recap"><div class="content"><ul><li><span class="icon"><i class="fa fa-info-circle"></i></span> What is DeltaSpike ?</li><li><span class="icon"><i class="fa fa-info-circle"></i></span> Core Module</li><li><span class="icon"><i class="fa fa-info-circle"></i></span> Other DeltaSpike Modules</li><li><span class="icon"><i class="fa fa-info-circle"></i></span> Question &amp; Answers</li></ul>
 <div class="admonitionblock tip"><table><tr><td class="icon"><i class="fa icon-tip" title="Tip"></i></td><td class="content">Slides available at <a href="http://rafabene.github.io/deltaspike-cdi-toolbox/" class="bare">rafabene.github.io/deltaspike-cdi-toolbox/</a></td></tr></table></div></div></div></section>
 <section class="intro2"><h2>What is DeltaSpike ?</h2><p><span class="image" style="float: right"><img src="images/ds_logo.png" alt="ds_logo" width="80%"></span></p></section>
+<section class="title"><h2>Where does it come from ?</h2><div class="exampleblock margin10"><div class="content"><p><span class="image"><img src="images/ds_history.png" alt="ds_history" width="95%"></span></p></div></div></section>
+<section class="topic"><h2>A bit of history</h2><div class="exampleblock smaller"><div class="content"><ul><li><span class="icon"><i class="fa fa-calendar"></i></span> <strong>Dec 2011:</strong> project launch</li><li><span class="icon"><i class="fa fa-calendar"></i></span> <strong>Feb 2012:</strong> version 0.1</li><li><span class="icon"><i class="fa fa-calendar"></i></span> <strong>May 2013:</strong> version 0.4 (out of incubator)</li><li><span class="icon"><i class="fa fa-calendar"></i></span> <strong>June 2014:</strong> version 1.0</li><li><span class="icon"><i class="fa fa-calendar"></i></span> <strong>August 2015:</strong> version 1.5</li></ul></div></div></section>
 <section class="topic"><h2>CDI &amp; DeltaSpike</h2><div class="exampleblock"><div class="content"><img class="pull-left" src="images/hook.png" alt="hook" width="30%">
 <div class="admonitionblock note"><table><tr><td class="icon"><i class="fa icon-note" title="Note"></i></td><td class="content">CDI is a specification. It doesn’t provide business features</td></tr></table></div>
 <div class="admonitionblock note"><table><tr><td class="icon"><i class="fa icon-note" title="Note"></i></td><td class="content">but it includes a powerful hook to add these business features</td></tr></table></div>
@@ -1251,8 +1253,6 @@ public class CdiExtension <span class="highlight">implements Extension</span> {
 <div class="admonitionblock note"><table><tr><td class="icon"><i class="fa icon-note" title="Note"></i></td><td class="content">A toolbox to help you develop new CDI portable extensions</td></tr></table></div>
 <div class="admonitionblock note"><table><tr><td class="icon"><i class="fa icon-note" title="Note"></i></td><td class="content">A great way to learn how to develop your own extension by browsing the source code</td></tr></table></div>
 <div class="admonitionblock note"><table><tr><td class="icon"><i class="fa icon-note" title="Note"></i></td><td class="content">The most obvious entry point to CDI eco-system</td></tr></table></div></div></div></section>
-<section class="title"><h2>Where does it come from ?</h2><div class="exampleblock margin10"><div class="content"><p><span class="image"><img src="images/ds_history.png" alt="ds_history" width="95%"></span></p></div></div></section>
-<section class="topic"><h2>A bit of history</h2><div class="exampleblock smaller"><div class="content"><ul><li><span class="icon"><i class="fa fa-calendar"></i></span> <strong>Dec 2011:</strong> project launch</li><li><span class="icon"><i class="fa fa-calendar"></i></span> <strong>Feb 2012:</strong> version 0.1</li><li><span class="icon"><i class="fa fa-calendar"></i></span> <strong>May 2013:</strong> version 0.4 (out of incubator)</li><li><span class="icon"><i class="fa fa-calendar"></i></span> <strong>June 2014:</strong> version 1.0</li><li><span class="icon"><i class="fa fa-calendar"></i></span> <strong>August 2015:</strong> version 1.5</li></ul></div></div></section>
 <section class="topic"><h2>DeltaSpike is tested with</h2><div class="exampleblock smallest"><div class="content"><ul><li><span class="icon"><i class="fa fa-cogs"></i></span> <em>CDI</em> 1.0, 1.1, 1.2 and 2.0</li><li><span class="icon"><i class="fa fa-cogs"></i></span> JBoss <em>Weld</em> and Apache <em>OpenWebBeans</em></li><li><span class="icon"><i class="fa fa-cogs"></i></span> <em>JBoss AS</em> 7.x, <em>WildFly</em> 8.x - 10.x</li><li><span class="icon"><i class="fa fa-cogs"></i></span> JBoss <em>EAP</em> 6.x - 7.x</li><li><span class="icon"><i class="fa fa-cogs"></i></span> Apache <em>TomEE</em> 1.0.x - 1.7.x</li><li><span class="icon"><i class="fa fa-cogs"></i></span> Oracle <em>GlassFish</em> 3.x, 4.x</li><li><span class="icon"><i class="fa fa-cogs"></i></span> Oracle <em>Weblogic</em> 12c</li><li><span class="icon"><i class="fa fa-cogs"></i></span> IBM <em>Websphere</em> 8.x</li></ul></div></div></section>
 <section class="source"><h2>Deltaspike is for all CDI developers</h2><div class="admonitionblock tip"><table><tr><td class="icon"><i class="fa icon-tip" title="Tip"></i></td><td class="content">While this talk is focused on classical project developers&#8230;&#8203;</td></tr></table></div>
 <div class="admonitionblock tip"><table><tr><td class="icon"><i class="fa icon-tip" title="Tip"></i></td><td class="content">&#8230;&#8203;advanced developers may find interesting helpers in Deltaspike</td></tr></table></div>
@@ -1363,7 +1363,7 @@ private MyMessages <span class="highlight">messages</span>;
 //
 new FacesMessage(<span class="highlight">messages</span>.welcomeTo("Rafael"));
 log.info(<span class="highlight">messages</span>.message());</code></pre></div>
-<div class="admonitionblock note"><table><tr><td class="icon"><i class="fa icon-note" title="Note"></i></td><td class="content">&#8230;&#8203;or even inside JSF  because it uses a <em>@Named</em> annotation.</td></tr></table></div>
+<div class="admonitionblock note"><table><tr><td class="icon"><i class="fa icon-note" title="Note"></i></td><td class="content">&#8230;&#8203;or even inside JSP/JSF  because it uses a <em>@Named</em> annotation.</td></tr></table></div>
 <div class="listingblock"><pre class="highlight"><code class="java">&lt;h1&gt;#{msg.welcome}&lt;/h1&gt;</code></pre></div>
 <div class="admonitionblock tip"><table><tr><td class="icon"><i class="fa icon-tip" title="Tip"></i></td><td class="content">It uses the “partial bean” module to dynamically create implementation at runtime.</td></tr></table></div></section>
 <section class="topic source"><h2>Core - @Exclude</h2><div class="admonitionblock note"><table><tr><td class="icon"><i class="fa icon-note" title="Note"></i></td><td class="content">It&#8217;s like <em>@Vetoed</em> from CDI 1.1 but better!</td></tr></table></div>
@@ -1385,7 +1385,7 @@ public String getVersion() throws IOException {
       return br.readLine();
     }
 }</code></pre></div>
-<div class="admonitionblock tip"><table><tr><td class="icon"><i class="fa icon-tip" title="Tip"></i></td><td class="content">The <em>InjectableResourceProvider</em> interface can be implemented to allow reading from alternate sources if needed (e.g. data</td></tr></table></div></section>
+<div class="admonitionblock tip"><table><tr><td class="icon"><i class="fa icon-tip" title="Tip"></i></td><td class="content">The <em>InjectableResourceProvider</em> interface can be implemented to allow reading from alternate sources if needed.</td></tr></table></div></section>
 <section class="intro"><h2>Data Module</h2></section>
 <section class="topic"><h2>Data Module</h2><div class="admonitionblock note"><table><tr><td class="icon"><i class="fa icon-note" title="Note"></i></td><td class="content">Data module is an implementation of the <em>repository pattern</em>.</td></tr></table></div>
 <div class="admonitionblock note"><table><tr><td class="icon"><i class="fa icon-note" title="Note"></i></td><td class="content">At the moment it only support RDBMS thru JPA.</td></tr></table></div>
@@ -1442,7 +1442,7 @@ int totalPages = paged.countPages();</code></pre></div></section>
 <section class="topic source"><h2>Security Module - Simple interceptor-style authorization</h2><div class="admonitionblock note"><table><tr><td class="icon"><i class="fa icon-note" title="Note"></i></td><td class="content">Type-safe authorization</td></tr></table></div>
 <div class="listingblock"><pre class="highlight"><code class="java">@Retention(value = RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE, ElementType.METHOD })
-@SecurityBindingType
+<span class="highlight">@SecurityBindingType</span>
 public @interface <span class="highlight">AdminOnly</span> {
 }
 
@@ -1522,6 +1522,8 @@ private <span class="highlight">Scheduler&lt;Job&gt;</span> jobScheduler;
 
 //...
 <span class="highlight">jobScheduler.registerNewJob(CdiAwareQuartzJob.class)</span>;</code></pre></div></section>
+<section class="intro"><h2>Other Modules</h2></section>
+<section class="title"><h2>Other Modules</h2><div class="exampleblock"><div class="content"><p><span class="image" style="float: right"><img src="images/modules.png" alt="modules" width="90%"></span></p></div></div></section>
 <section class="topic"><h2>Want to go farther on CDI?</h2><p><span class="icon"><i class="fa fa-cogs"></i></span> <strong>TUT2376:</strong> Advanced CDI in live coding</p>
 <p><span class="icon"><i class="fa fa-clock-o"></i></span> Tuesday 27th at 8:30</p>
 <p><span class="icon"><i class="fa fa-building-o"></i></span> Cyril Magnin II / III</p>
