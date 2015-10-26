@@ -7,3 +7,5 @@ slides.html
 
 ## Directory-based project format:
 .idea/
+/images/*.svg
+/images/*.svg.cache
