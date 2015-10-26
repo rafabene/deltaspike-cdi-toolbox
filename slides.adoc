@@ -98,6 +98,25 @@ TIP: Slides available at http://rafabene.github.io/deltaspike-cdi-toolbox/
 == What is DeltaSpike ?
 image:ds_logo.png[float="right",align="center",width="80%"]
 
+[.title]
+== Where does it come from ?
+
+[.margin10]
+====
+image:ds_history.png[width="95%"]
+====
+
+[.topic]
+== A bit of history
+[.smaller]
+====
+* icon:calendar[] *Dec 2011:* project launch
+* icon:calendar[] *Feb 2012:* version 0.1
+* icon:calendar[] *May 2013:* version 0.4 (out of incubator)
+* icon:calendar[] *June 2014:* version 1.0
+* icon:calendar[] *August 2015:* version 1.5
+====
+
 
 [.topic]
 == CDI & DeltaSpike
@@ -316,25 +335,6 @@ NOTE: A toolbox to help you develop new CDI portable extensions
 NOTE: A great way to learn how to develop your own extension by browsing the source code
 
 NOTE: The most obvious entry point to CDI eco-system
-====
-
-[.title]
-== Where does it come from ?
-
-[.margin10]
-====
-image:ds_history.png[width="95%"]
-====
-
-[.topic]
-== A bit of history
-[.smaller]
-====
-* icon:calendar[] *Dec 2011:* project launch
-* icon:calendar[] *Feb 2012:* version 0.1
-* icon:calendar[] *May 2013:* version 0.4 (out of incubator)
-* icon:calendar[] *June 2014:* version 1.0
-* icon:calendar[] *August 2015:* version 1.5
 ====
 
 [.topic]
@@ -587,7 +587,7 @@ new FacesMessage([highlight]#messages#.welcomeTo("Rafael"));
 log.info([highlight]#messages#.message());
 ----
 
-NOTE: ...or even inside JSF  because it uses a _@Named_ annotation.
+NOTE: ...or even inside JSP/JSF  because it uses a _@Named_ annotation.
 [source, subs="verbatim,quotes"]
 ----
 <h1>#{msg.welcome}</h1>
@@ -646,7 +646,7 @@ public String getVersion() throws IOException {
 }
 ----
 
-TIP: The _InjectableResourceProvider_ interface can be implemented to allow reading from alternate sources if needed (e.g. data
+TIP: The _InjectableResourceProvider_ interface can be implemented to allow reading from alternate sources if needed.
 
 [.intro]
 == Data Module
@@ -751,7 +751,7 @@ NOTE: Type-safe authorization
 ----
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE, ElementType.METHOD })
-@SecurityBindingType
+[highlight]#@SecurityBindingType#
 public @interface [highlight]#AdminOnly# {
 }
 
@@ -881,6 +881,16 @@ private [highlight]#Scheduler<Job># jobScheduler;
 //...
 [highlight]#jobScheduler.registerNewJob(CdiAwareQuartzJob.class)#;
 ----
+
+[.intro]
+== Other Modules
+
+[.title]
+== Other Modules
+
+====
+image:modules.png[width="90%", align="center", float="right"]
+====
 
 [.topic]
 == Want to go farther on CDI?
