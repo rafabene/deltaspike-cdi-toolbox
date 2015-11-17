@@ -1,5 +1,5 @@
 = Apache DeltaSpike - the _CDI_ toolbox
-Antoine Sabot-Durand; Rafael Benevides
+Rafael Benevides
 :description: Apache DeltaSpike - the CDI toolbox
 :website:
 :copyright: CC BY-SA 4.0
@@ -35,18 +35,6 @@ Antoine Sabot-Durand; Rafael Benevides
 * icon:twitter[] @rafabene
 * icon:rss[] rafabene.com
 * icon:github[] github.com/rafabene
-====
-
-
-[.topic.source]
-== Antoine Sabot-Durand
-
-====
-* icon:code[] CDI spec lead
-* icon:linux[] Red Hat, Inc.
-* icon:twitter[] @antoine_sd
-* icon:rss[] next-presso.com
-* icon:github[] github.com/antoinesd
 ====
 
 [.topic.source]
@@ -413,7 +401,7 @@ public class InventoryActions {
 
     public Integer queryForItem(Item item) {
         try {
-          Query q = em.createQuery("SELECT i from Item i where i.id = :id");
+          Query q = em.createQuery("SELECT i FROM Item i WHERE i.id = :id");
           q.setParameter("id", item.getId());
           return q.getSingleResult();
         } catch (PersistenceException e) {
@@ -457,7 +445,6 @@ NOTE: The current _ProjectStage_ can be injected.
 private ProjectStage [highlight]#projectStage#;
 
 //...
-
 boolean isDevelopment = ProjectStage.Development.equals(this.[highlight]#projectStage#);
 ----
 
@@ -496,10 +483,10 @@ NOTE: It can be set using _DeltaSpike Configuration Mechanism_
 
 icon:question-circle[] How to provide these Key/Values to DeltaSpike?
 
-. System properties
-. Environment properties
-. JNDI values - the base name is "java:comp/env/deltaspike/"
 . Properties file values -  default filename is "META-INF/apache-deltaspike.properties"
+. JNDI values - the base name is "java:comp/env/deltaspike/"
+. Environment properties
+. System properties
 
 [.topic.source]
 == Core - DeltaSpike Configuration Mechanism
@@ -724,7 +711,7 @@ public interface UserRepository extends EntityRepository<User, Long> {
 @Repository
 public interface UserRepository extends EntityRepository<User, Long> {
 
-  @Query("select p from Person p where p.age between ?1 and ?2")
+  @Query("select p FROM Person p WHERE p.age BETWEEN ?1 AND ?2")
   [highlight]#QueryResult<Person># findAllByAge(int minAge, int maxAge);
 
 }
@@ -794,19 +781,17 @@ public class ApplicationAuthorizer {
 ----
 @MessageBundle
 public interface [highlight]#Messages# {
-
     @MessageTemplate("Welcome to DeltaSpike")
     String welcomeToDeltaSpike();
-
 }
 
 @Model
 public class MyJSFBean {
 
-    @Inject
-    private [highlight]#JsfMessage<Messages> messages#;
+    @Inject private [highlight]#JsfMessage<Messages> messages#;
+    //@Inject private Messages msg;
 
-    //...
+    //getFacesContext().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg.welcomeToDeltaSpike(), null));
     [highlight]#messages.addInfo().welcomeToDeltaSpike()#;
 }
 ----
@@ -891,17 +876,6 @@ private [highlight]#Scheduler<Job># jobScheduler;
 ====
 image:modules.png[width="90%", align="center", float="right"]
 ====
-
-[.topic]
-== Want to go farther on CDI?
-
-icon:cogs[] *TUT2376:* Advanced CDI in live coding
-
-icon:clock-o[] Tuesday 27th at 8:30
-
-icon:building-o[] Cyril Magnin II / III
-
-icon:user[] Antonin Stefanutti & Antoine SD
 
 
 [.topic]
